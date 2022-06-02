@@ -104,7 +104,7 @@ class Battlefield {
     if (pokemon.current_hp <= 0) {
       this.gameOver = true;
       setTimeout(() => {
-        challengeBox.classList.remove("fighting");
+        containerBattlefield.classList.remove("fighting");
       }, 6000);
 
       healthInfoOne.textContent = "Fainted";
@@ -124,7 +124,7 @@ class Battlefield {
     if (pokemon.current_hp <= 0) {
       this.gameOver = true;
       setTimeout(() => {
-        challengeBox.classList.remove("fighting");
+        containerBattlefield.classList.remove("fighting");
       }, 6000);
       healthInfoTwo.textContent = "Fainted";
       healthBarTwo.style.width = `0%`;
@@ -354,15 +354,15 @@ function randomMoves(array) {
 ///////////////////////////////////////////////////////////////////////////////// DOM STUFF
 const containerAll = document.querySelector(".container-all");
 
-const challengeBox = document.querySelector(".challenge-box");
-challengeBox.style.display = "flex";
-challengeBox.style.flexDirection = "column";
-challengeBox.style.justifyContent = "space-between";
-challengeBox.style.alignItems = "center";
-challengeBox.style.backgroundColor = "white";
-challengeBox.style.position = "relative";
-challengeBox.style.color = "black";
-challengeBox.textContent = "Click me to start a new match!";
+const containerBattlefield = document.querySelector(".container-battlefield");
+containerBattlefield.style.display = "flex";
+containerBattlefield.style.flexDirection = "column";
+containerBattlefield.style.justifyContent = "space-between";
+containerBattlefield.style.alignItems = "center";
+containerBattlefield.style.backgroundColor = "white";
+containerBattlefield.style.position = "relative";
+containerBattlefield.style.color = "black";
+containerBattlefield.textContent = "Click me to start a new match!";
 
 const primaryCommentary = document.createElement("div");
 containerAll.appendChild(primaryCommentary);
@@ -384,7 +384,7 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
   containerBattle.style.display = "flex";
   containerBattle.style.justifyContent = "center";
   containerBattle.style.alignItems = "center";
-  challengeBox.appendChild(containerBattle);
+  containerBattlefield.appendChild(containerBattle);
 
   const pokemonOneImg = document.createElement("img");
   pokemonOneImg.src = pokemonOne.sprite_back;
@@ -405,7 +405,7 @@ function createTopHealthBar(pokemon) {
   healthBar.style.background = "red";
   healthBar.style.color = "black";
   healthBar.style.transition = "ease-in-out 2s";
-  challengeBox.appendChild(healthBar);
+  containerBattlefield.appendChild(healthBar);
   displayPokemonTwoVitals(pokemon);
 }
 
@@ -417,7 +417,7 @@ function createBottomHealthBar(pokemon) {
   healthBar.style.background = "red";
   healthBar.style.color = "black";
   healthBar.style.transition = "ease-in-out 2s";
-  challengeBox.appendChild(healthBar);
+  containerBattlefield.appendChild(healthBar);
 
   displayPokemonOneVitals(pokemon);
 }
@@ -439,7 +439,7 @@ function displayPokemonOneVitals(pokemon) {
   healthInfo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
   pokemonVitalsContainer.appendChild(healthInfo);
 
-  challengeBox.appendChild(pokemonVitalsContainer);
+  containerBattlefield.appendChild(pokemonVitalsContainer);
 }
 
 function displayPokemonTwoVitals(pokemon) {
@@ -459,13 +459,13 @@ function displayPokemonTwoVitals(pokemon) {
   healthInfo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
   pokemonVitalsContainer.appendChild(healthInfo);
 
-  challengeBox.appendChild(pokemonVitalsContainer);
+  containerBattlefield.appendChild(pokemonVitalsContainer);
 }
 
-challengeBox.addEventListener("click", () => {
-  if (!challengeBox.classList.contains("fighting")) {
-    challengeBox.classList.add("fighting");
-    challengeBox.innerHTML = "";
+containerBattlefield.addEventListener("click", () => {
+  if (!containerBattlefield.classList.contains("fighting")) {
+    containerBattlefield.classList.add("fighting");
+    containerBattlefield.innerHTML = "";
     createBattleField();
   }
 });
