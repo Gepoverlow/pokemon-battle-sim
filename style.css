@@ -1,0 +1,14 @@
+body {
+  background-color: #4f7092;
+  color: aliceblue;
+}
+
+.container-all {
+  padding: 3em;
+}
+
+.challenge-box {
+  min-height: 300px;
+  background-color: #000814;
+  border: 2px solid #ffc300;
+}
