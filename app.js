@@ -28,9 +28,7 @@ class Battlefield {
     if (this.pokemonOne.base_speed > this.pokemonTwo.base_speed) {
       setTimeout(() => {
         if (!this.gameOver) {
-          updatePrimaryCommentary(
-            `${this.pokemonOne.name} attempts to use ${pokemoOneMove.identifier}!`
-          );
+          updatePrimaryCommentary(`${this.pokemonOne.name} used ${pokemoOneMove.identifier}!`);
           this.pokemonTwo.calculateDamageReceived(pokemoOneMove);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
@@ -38,9 +36,7 @@ class Battlefield {
 
       setTimeout(() => {
         if (!this.gameOver) {
-          updatePrimaryCommentary(
-            `${this.pokemonTwo.name} attempts to use ${pokemoTwoMove.identifier}!`
-          );
+          updatePrimaryCommentary(`${this.pokemonTwo.name} used ${pokemoTwoMove.identifier}!`);
           this.pokemonOne.calculateDamageReceived(pokemoTwoMove);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
@@ -48,9 +44,7 @@ class Battlefield {
     } else {
       setTimeout(() => {
         if (!this.gameOver) {
-          updatePrimaryCommentary(
-            `${this.pokemonTwo.name} attempts to use ${pokemoTwoMove.identifier}!`
-          );
+          updatePrimaryCommentary(`${this.pokemonTwo.name} used ${pokemoTwoMove.identifier}!`);
           this.pokemonOne.calculateDamageReceived(pokemoTwoMove);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
@@ -58,9 +52,7 @@ class Battlefield {
 
       setTimeout(() => {
         if (!this.gameOver) {
-          updatePrimaryCommentary(
-            `${this.pokemonOne.name} attampts to use ${pokemoOneMove.identifier}!`
-          );
+          updatePrimaryCommentary(`${this.pokemonOne.name} used ${pokemoOneMove.identifier}!`);
           this.pokemonTwo.calculateDamageReceived(pokemoOneMove);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
