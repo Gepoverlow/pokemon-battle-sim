@@ -24,53 +24,41 @@ class Battlefield {
 
     if (this.pokemonOne.base_speed > this.pokemonTwo.base_speed) {
       setTimeout(() => {
-        if (this.pokemonOne.isSuccesfullHit(this.pokemonOne.moves[0]) && !this.gameOver) {
+        if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonOne.name} used ${this.pokemonOne.moves[0].identifier}!`
+            `${this.pokemonOne.name} attempts to use ${this.pokemonOne.moves[0].identifier}!`
           );
           this.pokemonTwo.calculateDamageReceived(this.pokemonOne.moves[0]);
-        } else if (!this.pokemonOne.isSuccesfullHit(this.pokemonOne.moves[0]) && !this.gameOver) {
-          console.log("miss");
-          updatePrimaryCommentary(`${this.pokemonOne.name} missed attack`);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
       }, 2000);
 
       setTimeout(() => {
-        if (this.pokemonTwo.isSuccesfullHit(this.pokemonTwo.moves[0]) && !this.gameOver) {
+        if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonTwo.name} used ${this.pokemonTwo.moves[0].identifier}!`
+            `${this.pokemonTwo.name} attempts to use ${this.pokemonTwo.moves[0].identifier}!`
           );
           this.pokemonOne.calculateDamageReceived(this.pokemonTwo.moves[0]);
-        } else if (!this.pokemonTwo.isSuccesfullHit(this.pokemonTwo.moves[0]) && !this.gameOver) {
-          console.log("miss");
-          updatePrimaryCommentary(`${this.pokemonTwo.name} missed attack`);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
       }, 4000);
     } else {
       setTimeout(() => {
-        if (this.pokemonTwo.isSuccesfullHit(this.pokemonTwo.moves[0]) && !this.gameOver) {
+        if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonTwo.name} used ${this.pokemonTwo.moves[0].identifier}!`
+            `${this.pokemonTwo.name} attempts to use ${this.pokemonTwo.moves[0].identifier}!`
           );
           this.pokemonOne.calculateDamageReceived(this.pokemonTwo.moves[0]);
-        } else if (!this.pokemonTwo.isSuccesfullHit(this.pokemonTwo.moves[0]) && !this.gameOver) {
-          console.log("miss");
-          updatePrimaryCommentary(`${this.pokemonTwo.name} missed attack`);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
       }, 2000);
 
       setTimeout(() => {
-        if (this.pokemonOne.isSuccesfullHit(this.pokemonOne.moves[0]) && !this.gameOver) {
+        if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonOne.name} used ${this.pokemonOne.moves[0].identifier}!`
+            `${this.pokemonOne.name} attampts to use ${this.pokemonOne.moves[0].identifier}!`
           );
           this.pokemonTwo.calculateDamageReceived(this.pokemonOne.moves[0]);
-        } else if (!this.pokemonOne.isSuccesfullHit(this.pokemonOne.moves[0]) && !this.gameOver) {
-          console.log("miss");
-          updatePrimaryCommentary(`${this.pokemonOne.name} missed attack`);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
       }, 4000);
@@ -160,38 +148,46 @@ class Pokemon {
     } else if (move.accuracy === null) {
       return true;
     } else {
+      console.log("miss");
+      console.log(rng, move.accuracy);
       return false;
     }
   }
 
   calculateDamageReceived(move) {
-    let dmgMultiplier = 1;
+    if (this.isSuccesfullHit(move)) {
+      let dmgMultiplier = 1;
 
-    for (let i = 0; i < this.type.weakTo.length; i++) {
-      if (move.type_id === this.type.weakTo[i]) {
-        dmgMultiplier = dmgMultiplier * 2;
+      for (let i = 0; i < this.type.weakTo.length; i++) {
+        if (move.type_id === this.type.weakTo[i]) {
+          dmgMultiplier = dmgMultiplier * 2;
+        }
       }
-    }
-    for (let i = 0; i < this.type.resistantTo.length; i++) {
-      if (move.type_id === this.type.resistantTo[i]) {
-        dmgMultiplier = dmgMultiplier * 0.5;
+      for (let i = 0; i < this.type.resistantTo.length; i++) {
+        if (move.type_id === this.type.resistantTo[i]) {
+          dmgMultiplier = dmgMultiplier * 0.5;
+        }
       }
-    }
 
-    let damageTaken = move.power * dmgMultiplier;
+      let damageTaken = move.power * dmgMultiplier;
 
-    this.current_hp = this.current_hp - damageTaken;
+      this.current_hp = this.current_hp - damageTaken;
 
-    if (dmgMultiplier > 1) {
-      updateSecondaryCommentary(`Its super effective! It does ${damageTaken} dmg to ${this.name}`);
-    } else if (dmgMultiplier < 1) {
-      updateSecondaryCommentary(
-        `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
-      );
+      if (dmgMultiplier > 1) {
+        updateSecondaryCommentary(
+          `Its super effective! It does ${damageTaken} dmg to ${this.name}`
+        );
+      } else if (dmgMultiplier < 1) {
+        updateSecondaryCommentary(
+          `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
+        );
+      } else {
+        updateSecondaryCommentary(
+          `Its of normal effectiveness. It does ${damageTaken} dmg to ${this.name}`
+        );
+      }
     } else {
-      updateSecondaryCommentary(
-        `Its of normal effectiveness. It does ${damageTaken} dmg to ${this.name}`
-      );
+      updateSecondaryCommentary(`Oh no! It misses!`);
     }
   }
 }
