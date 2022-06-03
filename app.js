@@ -182,9 +182,7 @@ class Pokemon {
           `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
         );
       } else {
-        updateSecondaryCommentary(
-          `Its of normal effectiveness. It does ${damageTaken} dmg to ${this.name}`
-        );
+        updateSecondaryCommentary(`It does ${damageTaken} dmg to ${this.name}`);
       }
     } else {
       updateSecondaryCommentary(`Oh no! It misses!`);
