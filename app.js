@@ -1,4 +1,4 @@
-const pokemonPool = 10;
+const pokemonPool = 151;
 
 class Battlefield {
   constructor(pokemonOne, pokemonTwo) {
@@ -145,8 +145,6 @@ class Pokemon {
     } else if (move.accuracy === null) {
       return true;
     } else {
-      console.log("miss");
-      console.log(rng, move.accuracy);
       return false;
     }
   }
@@ -334,16 +332,16 @@ async function getMoves() {
   return response;
 }
 
-function randomMoves(array) {
-  const moves = [];
+// function randomMoves(array) {
+//   const moves = [];
 
-  for (let i = 0; i < 4; i++) {
-    let random = Math.floor(Math.random() * array.length);
-    moves.push(array[random]);
-  }
+//   for (let i = 0; i < 4; i++) {
+//     let random = Math.floor(Math.random() * array.length);
+//     moves.push(array[random]);
+//   }
 
-  return moves;
-}
+//   return moves;
+// }
 
 ///////////////////////////////////////////////////////////////////////////////// DOM STUFF
 const containerAll = document.querySelector(".container-all");
