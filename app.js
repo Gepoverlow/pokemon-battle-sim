@@ -22,52 +22,55 @@ class Battlefield {
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
 
+    let pokemoOneMove = this.pokemonOne.moves[0];
+    let pokemoTwoMove = this.pokemonOne.moves[0];
+
     if (this.pokemonOne.base_speed > this.pokemonTwo.base_speed) {
       setTimeout(() => {
         if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonOne.name} attempts to use ${this.pokemonOne.moves[0].identifier}!`
+            `${this.pokemonOne.name} attempts to use ${pokemoOneMove.identifier}!`
           );
-          this.pokemonTwo.calculateDamageReceived(this.pokemonOne.moves[0]);
+          this.pokemonTwo.calculateDamageReceived(pokemoOneMove);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
-      }, 2000);
+      }, 3000);
 
       setTimeout(() => {
         if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonTwo.name} attempts to use ${this.pokemonTwo.moves[0].identifier}!`
+            `${this.pokemonTwo.name} attempts to use ${pokemoTwoMove.identifier}!`
           );
-          this.pokemonOne.calculateDamageReceived(this.pokemonTwo.moves[0]);
+          this.pokemonOne.calculateDamageReceived(pokemoTwoMove);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
-      }, 4000);
+      }, 6000);
     } else {
       setTimeout(() => {
         if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonTwo.name} attempts to use ${this.pokemonTwo.moves[0].identifier}!`
+            `${this.pokemonTwo.name} attempts to use ${pokemoTwoMove.identifier}!`
           );
-          this.pokemonOne.calculateDamageReceived(this.pokemonTwo.moves[0]);
+          this.pokemonOne.calculateDamageReceived(pokemoTwoMove);
         }
         this.gameOver ? null : this.updatePokemonOneHealth(this.pokemonOne);
-      }, 2000);
+      }, 3000);
 
       setTimeout(() => {
         if (!this.gameOver) {
           updatePrimaryCommentary(
-            `${this.pokemonOne.name} attampts to use ${this.pokemonOne.moves[0].identifier}!`
+            `${this.pokemonOne.name} attampts to use ${pokemoOneMove.identifier}!`
           );
-          this.pokemonTwo.calculateDamageReceived(this.pokemonOne.moves[0]);
+          this.pokemonTwo.calculateDamageReceived(pokemoOneMove);
         }
         this.gameOver ? null : this.updatePokemonTwoHealth(this.pokemonTwo);
-      }, 4000);
+      }, 6000);
     }
 
     if (!this.gameOver) {
       setTimeout(() => {
         this.round();
-      }, 6000);
+      }, 7000);
     } else {
       return;
     }
