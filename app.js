@@ -1,3 +1,5 @@
+const pokemonPool = 10;
+
 class Battlefield {
   constructor(pokemonOne, pokemonTwo) {
     this.pokemonOne = pokemonOne;
@@ -23,7 +25,7 @@ class Battlefield {
     this.shuffleMoves(this.pokemonTwo.moves);
 
     let pokemoOneMove = this.pokemonOne.moves[0];
-    let pokemoTwoMove = this.pokemonOne.moves[0];
+    let pokemoTwoMove = this.pokemonTwo.moves[0];
 
     if (this.pokemonOne.base_speed > this.pokemonTwo.base_speed) {
       setTimeout(() => {
@@ -291,7 +293,7 @@ function handleMove(responseMoves) {
 }
 
 async function getPokemon() {
-  let randomNumber = Math.floor(Math.random() * 898);
+  let randomNumber = Math.floor(Math.random() * pokemonPool);
 
   const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber}`);
   const response = await data.json();
@@ -308,7 +310,8 @@ async function assignMoves(pokemon) {
 
   let commonMoves = possibleMoves.filter((x) => pokemonMoves.includes(x.identifier));
 
-  pokemon.moves = randomMoves(commonMoves);
+  pokemon.moves = commonMoves;
+  // pokemon.moves = randomMoves(commonMoves);
 }
 
 async function createBattleField() {
