@@ -21,10 +21,17 @@ body {
 #top-health-bar,
 #bottom-health-bar {
   width: 100%;
-  align-items: center;
   background: red;
   color: black;
   transition: ease-in-out 2s;
+}
+
+#bottom-health-bar {
+  justify-self: start;
+}
+
+#top-health-bar {
+  justify-self: end;
 }
 
 #container-battle {
