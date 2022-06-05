@@ -7,7 +7,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
   padding: 0 3em;
 }
 
@@ -64,5 +63,5 @@ body {
 #pokemon-one-img,
 #pokemon-two-img {
   position: absolute;
-  transition: all 2s ease-out;
+  transition: all 1s ease-out;
 }

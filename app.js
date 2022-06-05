@@ -12,13 +12,18 @@ class Battlefield {
     this.round();
   }
 
+  assignElementIds() {
+    this.roundOrder[0].elementId = "pokemon-one-img";
+    this.roundOrder[1].elementId = "pokemon-two-img";
+  }
+
   assignPositions() {
     let boundingClientRect = containerBattlefield.getBoundingClientRect();
 
-    let oneStartingX = 165;
-    let oneStartingY = 50;
-    let twoStartingX = 40;
-    let twoStartingY = boundingClientRect.right - 200;
+    let oneStartingY = 165;
+    let oneStartingX = 50;
+    let twoStartingY = 40;
+    let twoStartingX = boundingClientRect.right - 200;
 
     this.roundOrder[0].x = oneStartingX;
     this.roundOrder[0].y = oneStartingY;
@@ -46,24 +51,26 @@ class Battlefield {
 
     setTimeout(() => {
       if (!this.gameOver) {
+        this.roundOrder[0].attackAnimation(this.roundOrder[1]);
         updatePrimaryCommentary(`${this.roundOrder[0].name} used ${pokemoOneMove.identifier}!`);
         this.roundOrder[1].calculateDamageReceived(pokemoOneMove);
       }
       this.gameOver ? null : this.updatePokemonTwoHealth(this.roundOrder[1]);
-    }, 3000);
+    }, 5000);
 
     setTimeout(() => {
       if (!this.gameOver) {
+        this.roundOrder[1].attackAnimation(this.roundOrder[0]);
         updatePrimaryCommentary(`${this.roundOrder[1].name} used ${pokemoTwoMove.identifier}!`);
         this.roundOrder[0].calculateDamageReceived(pokemoTwoMove);
       }
       this.gameOver ? null : this.updatePokemonOneHealth(this.roundOrder[0]);
-    }, 6000);
+    }, 10000);
 
     if (!this.gameOver) {
       setTimeout(() => {
         this.round();
-      }, 7000);
+      }, 11000);
     } else {
       return;
     }
@@ -142,11 +149,63 @@ class Pokemon {
     this.moves = handleMove(response.moves);
     this.x = undefined;
     this.y = undefined;
+    this.elementId = undefined;
   }
 
   attackAnimation(defendingPokemon) {
     let attackPositionX = defendingPokemon.x;
     let attackPositionY = defendingPokemon.y;
+
+    this.x = attackPositionX;
+    this.y = attackPositionY;
+
+    let attackingPokemon = document.getElementById(`${this.elementId}`);
+
+    console.log(`attacking ${attackPositionX} ${attackPositionY}...`);
+
+    attackingPokemon.style.top = this.y + "px";
+    attackingPokemon.style.left = this.x + "px";
+
+    setTimeout(() => {
+      this.bounceBackAnimation();
+    }, 1000);
+  }
+
+  bounceBackAnimation() {
+    const adj = -50;
+
+    let midFieldPosition = containerBattlefield.clientWidth / 2 + adj;
+
+    if (this.elementId === "pokemon-one-img") {
+      let randomXPosition = randomIntFromInterval(adj, midFieldPosition);
+      let randomYPosition = randomIntFromInterval(adj, containerBattlefield.clientHeight + adj);
+
+      this.x = randomXPosition;
+      this.y = randomYPosition;
+
+      let attackingPokemon = document.getElementById(`${this.elementId}`);
+
+      attackingPokemon.style.left = this.x + "px";
+      attackingPokemon.style.top = this.y + "px";
+
+      console.log(`im gonna bounce back to ${this.x}, ${this.y}`);
+    } else {
+      let randomXPosition = randomIntFromInterval(
+        midFieldPosition + adj,
+        containerBattlefield.clientWidth + adj
+      );
+      let randomYPosition = randomIntFromInterval(adj, containerBattlefield.clientHeight + adj);
+
+      this.x = randomXPosition;
+      this.y = randomYPosition;
+
+      let attackingPokemon = document.getElementById(`${this.elementId}`);
+
+      attackingPokemon.style.left = this.x + "px";
+      attackingPokemon.style.top = this.y + "px";
+
+      console.log(`im gonna bounce back to ${this.x}, ${this.y}`);
+    }
   }
 
   isSuccesfullHit(move) {
@@ -194,6 +253,9 @@ class Pokemon {
       updateSecondaryCommentary(`Oh no! It misses!`);
     }
   }
+}
+function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function handleTypes(responseTypes) {
@@ -331,6 +393,7 @@ async function createBattleField() {
   const battle = new Battlefield(pokemonOne, pokemonTwo);
 
   battle.assignPositions();
+  battle.assignElementIds();
 
   createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
 
@@ -372,8 +435,8 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
 
   const pokemonOneImg = document.createElement("img");
   pokemonOneImg.id = "pokemon-one-img";
-  pokemonOneImg.style.top = pokemonOne.x + "px";
-  pokemonOneImg.style.left = pokemonOne.y + "px";
+  pokemonOneImg.style.top = pokemonOne.y + "px";
+  pokemonOneImg.style.left = pokemonOne.x + "px";
   // pokemonOneImg.style.top = pokemonOne.x + 115 + "px";
   // pokemonOneImg.style.left = pokemonOne.y + "px";
   pokemonOneImg.src = pokemonOne.sprite_back;
@@ -381,8 +444,8 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
 
   const pokemonTwoImg = document.createElement("img");
   pokemonTwoImg.id = "pokemon-two-img";
-  pokemonTwoImg.style.top = pokemonTwo.x + "px";
-  pokemonTwoImg.style.left = pokemonTwo.y + "px";
+  pokemonTwoImg.style.top = pokemonTwo.y + "px";
+  pokemonTwoImg.style.left = pokemonTwo.x + "px";
   // pokemonTwoImg.style.top = pokemonTwo.x - 15 + "px";
   // pokemonTwoImg.style.left = boundingClientRect.right - 200 + "px";
   pokemonTwoImg.src = pokemonTwo.sprite_front;
