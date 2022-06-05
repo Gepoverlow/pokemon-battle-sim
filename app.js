@@ -29,7 +29,6 @@ class Battlefield {
 
     setTimeout(() => {
       if (!this.gameOver) {
-        console.log("hi");
         updatePrimaryCommentary(`${this.roundOrder[0].name} used ${pokemoOneMove.identifier}!`);
         this.roundOrder[1].calculateDamageReceived(pokemoOneMove);
       }
@@ -38,7 +37,6 @@ class Battlefield {
 
     setTimeout(() => {
       if (!this.gameOver) {
-        console.log("hiii");
         updatePrimaryCommentary(`${this.roundOrder[1].name} used ${pokemoTwoMove.identifier}!`);
         this.roundOrder[0].calculateDamageReceived(pokemoTwoMove);
       }
@@ -337,28 +335,10 @@ async function getMoves() {
   return response;
 }
 
-// function randomMoves(array) {
-//   const moves = [];
-
-//   for (let i = 0; i < 4; i++) {
-//     let random = Math.floor(Math.random() * array.length);
-//     moves.push(array[random]);
-//   }
-
-//   return moves;
-// }
-
 ///////////////////////////////////////////////////////////////////////////////// DOM STUFF
 const containerAll = document.querySelector(".container-all");
 
 const containerBattlefield = document.querySelector(".container-battlefield");
-containerBattlefield.style.display = "flex";
-containerBattlefield.style.flexDirection = "column";
-containerBattlefield.style.justifyContent = "space-between";
-containerBattlefield.style.alignItems = "center";
-containerBattlefield.style.backgroundColor = "white";
-containerBattlefield.style.position = "relative";
-containerBattlefield.style.color = "black";
 containerBattlefield.textContent = "Click me to start a new match!";
 
 const primaryCommentary = document.createElement("div");
@@ -378,9 +358,7 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
   createTopHealthBar(pokemonTwo);
 
   const containerBattle = document.createElement("div");
-  containerBattle.style.display = "flex";
-  containerBattle.style.justifyContent = "center";
-  containerBattle.style.alignItems = "center";
+  containerBattle.id = "container-battle";
   containerBattlefield.appendChild(containerBattle);
 
   const pokemonOneImg = document.createElement("img");
@@ -397,34 +375,22 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
 function createTopHealthBar(pokemon) {
   const healthBar = document.createElement("div");
   healthBar.id = "top-health-bar";
-  healthBar.style.height = "30px";
-  healthBar.style.width = "100%";
-  healthBar.style.background = "red";
-  healthBar.style.color = "black";
-  healthBar.style.transition = "ease-in-out 2s";
   containerBattlefield.appendChild(healthBar);
-  displayPokemonTwoVitals(pokemon);
+
+  displayPokemonTwoVitals(pokemon, healthBar);
 }
 
 function createBottomHealthBar(pokemon) {
   const healthBar = document.createElement("div");
   healthBar.id = "bottom-health-bar";
-  healthBar.style.height = "30px";
-  healthBar.style.width = "100%";
-  healthBar.style.background = "red";
-  healthBar.style.color = "black";
-  healthBar.style.transition = "ease-in-out 2s";
   containerBattlefield.appendChild(healthBar);
 
-  displayPokemonOneVitals(pokemon);
+  displayPokemonOneVitals(pokemon, healthBar);
 }
 
-function displayPokemonOneVitals(pokemon) {
+function displayPokemonOneVitals(pokemon, bar) {
   const pokemonVitalsContainer = document.createElement("div");
-  pokemonVitalsContainer.style.position = "absolute";
-  pokemonVitalsContainer.style.bottom = "30px";
-  pokemonVitalsContainer.style.left = "30px";
-  pokemonVitalsContainer.style.color = "black";
+  pokemonVitalsContainer.id = "pokemon-one-vitals";
 
   const healthBarName = document.createElement("span");
   healthBarName.textContent = pokemon.name;
@@ -436,15 +402,12 @@ function displayPokemonOneVitals(pokemon) {
   healthInfo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
   pokemonVitalsContainer.appendChild(healthInfo);
 
-  containerBattlefield.appendChild(pokemonVitalsContainer);
+  bar.appendChild(pokemonVitalsContainer);
 }
 
-function displayPokemonTwoVitals(pokemon) {
+function displayPokemonTwoVitals(pokemon, bar) {
   const pokemonVitalsContainer = document.createElement("div");
-  pokemonVitalsContainer.style.position = "absolute";
-  pokemonVitalsContainer.style.top = "30px";
-  pokemonVitalsContainer.style.right = "30px";
-  pokemonVitalsContainer.style.color = "black";
+  pokemonVitalsContainer.id = "pokemon-two-vitals";
 
   const healthBarName = document.createElement("span");
   healthBarName.textContent = pokemon.name;
@@ -456,7 +419,7 @@ function displayPokemonTwoVitals(pokemon) {
   healthInfo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
   pokemonVitalsContainer.appendChild(healthInfo);
 
-  containerBattlefield.appendChild(pokemonVitalsContainer);
+  bar.appendChild(pokemonVitalsContainer);
 }
 
 containerBattlefield.addEventListener("click", () => {

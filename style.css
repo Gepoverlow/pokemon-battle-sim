@@ -8,7 +8,42 @@ body {
 }
 
 .container-battlefield {
+  display: grid;
+  flex-direction: column;
+  grid-template-rows: 1fr 8fr 1fr;
+  background-color: white;
+  position: relative;
+  color: black;
   min-height: 300px;
-  background-color: #000814;
   border: 2px solid #ffc300;
+}
+
+#top-health-bar,
+#bottom-health-bar {
+  width: 100%;
+  align-items: center;
+  background: red;
+  color: black;
+  transition: ease-in-out 2s;
+}
+
+#container-battle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#pokemon-one-vitals {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: black;
+}
+
+#pokemon-two-vitals {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  color: black;
 }
