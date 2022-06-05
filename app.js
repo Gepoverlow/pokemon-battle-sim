@@ -41,8 +41,6 @@ class Battlefield {
   }
 
   round() {
-    console.log(this.roundOrder);
-
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
 
@@ -56,7 +54,7 @@ class Battlefield {
         this.roundOrder[1].calculateDamageReceived(pokemoOneMove);
       }
       this.gameOver ? null : this.updatePokemonTwoHealth(this.roundOrder[1]);
-    }, 5000);
+    }, 2000);
 
     setTimeout(() => {
       if (!this.gameOver) {
@@ -65,12 +63,12 @@ class Battlefield {
         this.roundOrder[0].calculateDamageReceived(pokemoTwoMove);
       }
       this.gameOver ? null : this.updatePokemonOneHealth(this.roundOrder[0]);
-    }, 10000);
+    }, 4000);
 
     if (!this.gameOver) {
       setTimeout(() => {
         this.round();
-      }, 11000);
+      }, 4200);
     } else {
       return;
     }
@@ -161,8 +159,6 @@ class Pokemon {
 
     let attackingPokemon = document.getElementById(`${this.elementId}`);
 
-    console.log(`attacking ${attackPositionX} ${attackPositionY}...`);
-
     attackingPokemon.style.top = this.y + "px";
     attackingPokemon.style.left = this.x + "px";
 
@@ -187,8 +183,6 @@ class Pokemon {
 
       attackingPokemon.style.left = this.x + "px";
       attackingPokemon.style.top = this.y + "px";
-
-      console.log(`im gonna bounce back to ${this.x}, ${this.y}`);
     } else {
       let randomXPosition = randomIntFromInterval(
         midFieldPosition + adj,
@@ -203,8 +197,6 @@ class Pokemon {
 
       attackingPokemon.style.left = this.x + "px";
       attackingPokemon.style.top = this.y + "px";
-
-      console.log(`im gonna bounce back to ${this.x}, ${this.y}`);
     }
   }
 
