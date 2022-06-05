@@ -4,7 +4,11 @@ body {
 }
 
 .container-all {
-  padding: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 3em;
 }
 
 .container-battlefield {
@@ -15,7 +19,9 @@ body {
   position: relative;
   color: black;
   min-height: 300px;
+  max-width: 600px;
   border: 2px solid #ffc300;
+  justify-self: center;
 }
 
 #top-health-bar,
