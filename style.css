@@ -54,3 +54,9 @@ body {
   right: 30px;
   color: black;
 }
+
+#pokemon-one-img,
+#pokemon-two-img {
+  position: absolute;
+  transition: all 2s ease-out;
+}

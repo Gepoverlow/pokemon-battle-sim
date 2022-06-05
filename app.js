@@ -21,6 +21,8 @@ class Battlefield {
   }
 
   round() {
+    console.log(this.roundOrder);
+
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
 
@@ -141,6 +143,8 @@ class Pokemon {
     this.base_speed = response.stats[5].base_stat;
     this.type = handleTypes(response.types);
     this.moves = handleMove(response.moves);
+    this.x = 50;
+    this.y = 50;
   }
 
   isSuccesfullHit(move) {
@@ -322,9 +326,10 @@ async function createBattleField() {
   await assignMoves(pokemonOne);
   await assignMoves(pokemonTwo);
 
-  createBattleContainer(pokemonOne, pokemonTwo);
-
   const battle = new Battlefield(pokemonOne, pokemonTwo);
+
+  createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
+
   battle.round();
 }
 
@@ -355,6 +360,8 @@ function updateSecondaryCommentary(string) {
 }
 
 function createBattleContainer(pokemonOne, pokemonTwo) {
+  let boundingClientRect = containerBattlefield.getBoundingClientRect();
+
   createTopHealthBar(pokemonTwo);
 
   const containerBattle = document.createElement("div");
@@ -362,10 +369,16 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
   containerBattlefield.appendChild(containerBattle);
 
   const pokemonOneImg = document.createElement("img");
+  pokemonOneImg.id = "pokemon-one-img";
+  pokemonOneImg.style.top = pokemonOne.x + 115 + "px";
+  pokemonOneImg.style.left = pokemonOne.y + "px";
   pokemonOneImg.src = pokemonOne.sprite_back;
   containerBattle.appendChild(pokemonOneImg);
 
   const pokemonTwoImg = document.createElement("img");
+  pokemonTwoImg.id = "pokemon-two-img";
+  pokemonTwoImg.style.top = pokemonTwo.x - 15 + "px";
+  pokemonTwoImg.style.left = boundingClientRect.right - 200 + "px";
   pokemonTwoImg.src = pokemonTwo.sprite_front;
   containerBattle.appendChild(pokemonTwoImg);
 
