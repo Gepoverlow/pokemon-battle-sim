@@ -42,6 +42,37 @@ class Battlefield {
     }
   }
 
+  checkForDittos() {
+    const struggle = {
+      id: 165,
+      identifier: "struggle",
+      generation_id: 1,
+      type_id: 1,
+      power: 50,
+      pp: 1,
+      accuracy: null,
+      priority: 0,
+      target_id: 8,
+      damage_class_id: 2,
+      effect_id: 255,
+      effect_chance: null,
+      contest_type_id: 1,
+      contest_effect_id: 1,
+      super_contest_effect_id: 5,
+    };
+
+    if (!this.roundOrder[0].moves.length && !this.roundOrder[1].moves.length) {
+      this.roundOrder[0].moves.push(struggle);
+      this.roundOrder[1].moves.push(struggle);
+    } else if (!this.roundOrder[1].moves.length) {
+      this.roundOrder[1].moves = this.roundOrder[0].moves;
+    } else if (!this.roundOrder[0].moves.length) {
+      this.roundOrder[0].moves = this.roundOrder[1].moves;
+    }
+
+    console.log(this.roundOrder);
+  }
+
   round() {
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
@@ -179,8 +210,6 @@ class Pokemon {
     // const adj = -50;
 
     let midFieldPosition = containerBattlefield.clientWidth / 2;
-
-    console.log(midFieldPosition);
 
     // console.log(containerBattlefield.clientHeight);
     // console.log(containerBattlefield.clientWidth);
@@ -486,6 +515,7 @@ async function createBattleField() {
   battle.determineFastest();
   battle.assignPositions();
   battle.assignElementIds();
+  battle.checkForDittos();
 
   createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
 
