@@ -78,18 +78,19 @@ class Battlefield {
       return;
     }
   }
-  shuffleMoves = (array) => {
+
+  shuffleMoves(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const temp = array[i];
       array[i] = array[j];
       array[j] = temp;
     }
-  };
+  }
 
   updatePokemonOneHealth(pokemon) {
     const healthInfoOne = document.getElementById("health-info-one");
-    healthInfoOne.textContent = `${pokemon.current_hp.toFixed(2)} / ${pokemon.base_hp}`;
+    healthInfoOne.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
 
     const healthBarOne = document.getElementById("bottom-health-bar");
     let newWidth = (pokemon.current_hp / pokemon.base_hp) * 100;
@@ -112,7 +113,7 @@ class Battlefield {
   }
   updatePokemonTwoHealth(pokemon) {
     const healthInfoTwo = document.getElementById("health-info-two");
-    healthInfoTwo.textContent = `${pokemon.current_hp.toFixed(2)} / ${pokemon.base_hp}`;
+    healthInfoTwo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
 
     const healthBarTwo = document.getElementById("top-health-bar");
     let newWidth = (pokemon.current_hp / pokemon.base_hp) * 100;
@@ -268,11 +269,14 @@ class Pokemon {
 
       const criticalMultiplier = this.rollCriticalChance();
 
-      const baseDamage = this.calculateBaseDamage(attackingPokemon).toFixed(2);
+      const baseDamage = this.calculateBaseDamage(attackingPokemon);
 
       const damageTaken = baseDamage * criticalMultiplier * typeMultiplier;
 
-      this.current_hp = this.current_hp - damageTaken;
+      const roundedDamage = (Math.round(damageTaken * 100) / 100).toFixed(2);
+
+      this.current_hp = this.current_hp - roundedDamage;
+      this.current_hp = (Math.round(this.current_hp * 100) / 100).toFixed(2);
 
       if (typeMultiplier > 0 && criticalMultiplier > 1) {
         updateTertiaryCommentary("Critical Hit! ");
@@ -282,16 +286,16 @@ class Pokemon {
 
       if (typeMultiplier > 1) {
         updateSecondaryCommentary(
-          `Its super effective! It does ${damageTaken} dmg to ${this.name}`
+          `Its super effective! It does ${roundedDamage} dmg to ${this.name}`
         );
       } else if (typeMultiplier === 0) {
         updateSecondaryCommentary(`It doesnt affect ${this.name}...`);
       } else if (typeMultiplier < 1) {
         updateSecondaryCommentary(
-          `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
+          `Its not very effective... It does ${roundedDamage} dmg to ${this.name}`
         );
       } else {
-        updateSecondaryCommentary(`It does ${damageTaken} dmg to ${this.name}`);
+        updateSecondaryCommentary(`It does ${roundedDamage} dmg to ${this.name}`);
       }
     } else {
       updateSecondaryCommentary(`Oh no! It misses!`);
