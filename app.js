@@ -140,8 +140,8 @@ class Pokemon {
     this.name = response.name;
     this.sprite_front = response.sprites.front_default;
     this.sprite_back = response.sprites.back_default;
-    this.current_hp = response.stats[0].base_stat * 7;
-    this.base_hp = response.stats[0].base_stat * 7;
+    this.current_hp = response.stats[0].base_stat.toFixed(2);
+    this.base_hp = response.stats[0].base_stat.toFixed(2);
     this.base_speed = response.stats[5].base_stat;
     this.base_attack = response.stats[1].base_stat;
     this.base_s_attack = response.stats[3].base_stat;
@@ -218,7 +218,13 @@ class Pokemon {
   }
 
   calculateBaseDamage(attackingPokemon) {
-    console.log(attackingPokemon);
+    const attMove = attackingPokemon.moves[0];
+
+    if (attMove.damage_class_id === 2) {
+      return (attMove.power * (attackingPokemon.base_attack / this.base_defence)) / 50 + 2;
+    } else if (attMove.damage_class_id === 3) {
+      return (attMove.power * (attackingPokemon.base_s_attack / this.base_s_defence)) / 50 + 2;
+    }
   }
 
   calculateDamageReceived(attackingPokemon) {
@@ -236,9 +242,9 @@ class Pokemon {
         }
       }
 
-      // const baseDamage =
+      const baseDamage = this.calculateBaseDamage(attackingPokemon).toFixed(2);
 
-      const damageTaken = attackingPokemon.moves[0].power * dmgMultiplier;
+      const damageTaken = baseDamage * dmgMultiplier;
 
       this.current_hp = this.current_hp - damageTaken;
 
