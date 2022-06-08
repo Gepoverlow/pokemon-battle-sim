@@ -232,42 +232,61 @@ class Pokemon {
     }
   }
 
+  rollCriticalChance() {
+    const rng = Math.floor(Math.random() * 101);
+    let criticalMultiplier = 1;
+
+    if (rng <= 6) {
+      criticalMultiplier = 2;
+    }
+
+    return criticalMultiplier;
+  }
+
   calculateDamageReceived(attackingPokemon) {
     if (this.isSuccesfullHit(attackingPokemon.moves[0])) {
-      let dmgMultiplier = 1;
+      let typeMultiplier = 1;
 
       for (let i = 0; i < this.type.weakTo.length; i++) {
         if (attackingPokemon.moves[0].type_id === this.type.weakTo[i]) {
-          dmgMultiplier = dmgMultiplier * 2;
+          typeMultiplier = typeMultiplier * 2;
         }
       }
       for (let i = 0; i < this.type.resistantTo.length; i++) {
         if (attackingPokemon.moves[0].type_id === this.type.resistantTo[i]) {
-          dmgMultiplier = dmgMultiplier * 0.5;
+          typeMultiplier = typeMultiplier * 0.5;
         }
       }
       //
       for (let i = 0; i < this.type.immuneTo.length; i++) {
         if (attackingPokemon.moves[0].type_id === this.type.immuneTo[i]) {
-          dmgMultiplier = dmgMultiplier * 0;
+          typeMultiplier = typeMultiplier * 0;
         }
       }
 
       //
 
+      const criticalMultiplier = this.rollCriticalChance();
+
       const baseDamage = this.calculateBaseDamage(attackingPokemon).toFixed(2);
 
-      const damageTaken = baseDamage * dmgMultiplier;
+      const damageTaken = baseDamage * criticalMultiplier * typeMultiplier;
 
       this.current_hp = this.current_hp - damageTaken;
 
-      if (dmgMultiplier > 1) {
+      if (typeMultiplier > 0 && criticalMultiplier > 1) {
+        updateTertiaryCommentary("Critical Hit! ");
+      } else {
+        updateTertiaryCommentary("");
+      }
+
+      if (typeMultiplier > 1) {
         updateSecondaryCommentary(
           `Its super effective! It does ${damageTaken} dmg to ${this.name}`
         );
-      } else if (dmgMultiplier === 0) {
+      } else if (typeMultiplier === 0) {
         updateSecondaryCommentary(`It doesnt affect ${this.name}...`);
-      } else if (dmgMultiplier < 1) {
+      } else if (typeMultiplier < 1) {
         updateSecondaryCommentary(
           `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
         );
@@ -482,10 +501,12 @@ const containerAll = document.querySelector(".container-all");
 const containerBattlefield = document.querySelector(".container-battlefield");
 containerBattlefield.textContent = "Click me to start a new match!";
 
-const primaryCommentary = document.createElement("div");
+const primaryCommentary = document.createElement("span");
 containerAll.appendChild(primaryCommentary);
-const secondaryCommentary = document.createElement("div");
+const secondaryCommentary = document.createElement("span");
 containerAll.appendChild(secondaryCommentary);
+const tertiaryCommentary = document.createElement("span");
+containerAll.appendChild(tertiaryCommentary);
 
 function updatePrimaryCommentary(string) {
   primaryCommentary.textContent = string;
@@ -493,6 +514,10 @@ function updatePrimaryCommentary(string) {
 
 function updateSecondaryCommentary(string) {
   secondaryCommentary.textContent = string;
+}
+
+function updateTertiaryCommentary(string) {
+  tertiaryCommentary.textContent = string;
 }
 
 function createBattleContainer(pokemonOne, pokemonTwo) {
