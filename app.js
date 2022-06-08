@@ -20,6 +20,8 @@ class Battlefield {
   assignPositions() {
     let boundingClientRect = containerBattlefield.getBoundingClientRect();
 
+    console.log(this.roundOrder);
+
     let oneStartingY = 165;
     let oneStartingX = 50;
     let twoStartingY = 40;
@@ -44,8 +46,8 @@ class Battlefield {
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
 
-    let pokemoOneMove = this.pokemonOne.moves[0];
-    let pokemoTwoMove = this.pokemonTwo.moves[0];
+    let pokemoOneMove = this.roundOrder[0].moves[0];
+    let pokemoTwoMove = this.roundOrder[1].moves[0];
 
     setTimeout(() => {
       if (!this.gameOver) {
@@ -84,7 +86,7 @@ class Battlefield {
 
   updatePokemonOneHealth(pokemon) {
     const healthInfoOne = document.getElementById("health-info-one");
-    healthInfoOne.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
+    healthInfoOne.textContent = `${pokemon.current_hp.toFixed(2)} / ${pokemon.base_hp}`;
 
     const healthBarOne = document.getElementById("bottom-health-bar");
     let newWidth = (pokemon.current_hp / pokemon.base_hp) * 100;
@@ -107,7 +109,7 @@ class Battlefield {
   }
   updatePokemonTwoHealth(pokemon) {
     const healthInfoTwo = document.getElementById("health-info-two");
-    healthInfoTwo.textContent = `${pokemon.current_hp} / ${pokemon.base_hp}`;
+    healthInfoTwo.textContent = `${pokemon.current_hp.toFixed(2)} / ${pokemon.base_hp}`;
 
     const healthBarTwo = document.getElementById("top-health-bar");
     let newWidth = (pokemon.current_hp / pokemon.base_hp) * 100;
@@ -401,6 +403,7 @@ async function createBattleField() {
   await assignMoves(pokemonTwo);
 
   const battle = new Battlefield(pokemonOne, pokemonTwo);
+  console.log(battle);
 
   battle.assignPositions();
   battle.assignElementIds();
