@@ -163,15 +163,11 @@ class Pokemon {
   attackAnimation(defendingPokemon) {
     let attackPositionX = defendingPokemon.x;
     let attackPositionY = defendingPokemon.y;
-
     this.x = attackPositionX;
     this.y = attackPositionY;
-
     let attackingPokemon = document.getElementById(`${this.elementId}`);
-
     attackingPokemon.style.top = this.y + "px";
     attackingPokemon.style.left = this.x + "px";
-
     setTimeout(() => {
       this.bounceBackAnimation();
     }, 1000);
@@ -180,13 +176,18 @@ class Pokemon {
   damageReceivedAnimation() {}
 
   bounceBackAnimation() {
-    const adj = -50;
+    // const adj = -50;
 
-    let midFieldPosition = containerBattlefield.clientWidth / 2 + adj;
+    let midFieldPosition = containerBattlefield.clientWidth / 2;
+
+    console.log(midFieldPosition);
+
+    // console.log(containerBattlefield.clientHeight);
+    // console.log(containerBattlefield.clientWidth);
 
     if (this.elementId === "pokemon-one-img") {
-      let randomXPosition = randomIntFromInterval(adj, midFieldPosition);
-      let randomYPosition = randomIntFromInterval(adj, containerBattlefield.clientHeight + adj);
+      let randomXPosition = randomIntFromInterval(0, midFieldPosition - 100);
+      let randomYPosition = randomIntFromInterval(35, containerBattlefield.clientHeight - 125);
 
       this.x = randomXPosition;
       this.y = randomYPosition;
@@ -197,10 +198,10 @@ class Pokemon {
       attackingPokemon.style.top = this.y + "px";
     } else {
       let randomXPosition = randomIntFromInterval(
-        midFieldPosition + adj,
-        containerBattlefield.clientWidth + adj
+        midFieldPosition,
+        containerBattlefield.clientWidth - 100
       );
-      let randomYPosition = randomIntFromInterval(adj, containerBattlefield.clientHeight + adj);
+      let randomYPosition = randomIntFromInterval(35, containerBattlefield.clientHeight - 125);
 
       this.x = randomXPosition;
       this.y = randomYPosition;

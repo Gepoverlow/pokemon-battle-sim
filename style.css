@@ -63,5 +63,5 @@ body {
 #pokemon-one-img,
 #pokemon-two-img {
   position: absolute;
-  transition: all 1s ease-out;
+  transition: all 1s ease-in-out;
 }
