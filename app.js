@@ -255,47 +255,33 @@ class Pokemon {
   }
 
   checkForStab(attackingPokemon) {
+    const types = [
+      "normal",
+      "fighting",
+      "flying",
+      "poison",
+      "ground",
+      "rock",
+      "bug",
+      "ghost",
+      "steel",
+      "fire",
+      "water",
+      "grass",
+      "electric",
+      "psychic",
+      "ice",
+      "dragon",
+      "dark",
+      "fairy",
+    ];
     const pType = attackingPokemon.type.type;
     const pMove = attackingPokemon.moves[0].type_id;
 
-    if (pType.includes("normal") && pMove === 1) {
-      return true;
-    } else if (pType.includes("fighting") && pMove === 2) {
-      return true;
-    } else if (pType.includes("flying") && pMove === 3) {
-      return true;
-    } else if (pType.includes("poison") && pMove === 4) {
-      return true;
-    } else if (pType.includes("ground") && pMove === 5) {
-      return true;
-    } else if (pType.includes("rock") && pMove === 6) {
-      return true;
-    } else if (pType.includes("bug") && pMove === 7) {
-      return true;
-    } else if (pType.includes("ghost") && pMove === 8) {
-      return true;
-    } else if (pType.includes("steel") && pMove === 9) {
-      return true;
-    } else if (pType.includes("fire") && pMove === 10) {
-      return true;
-    } else if (pType.includes("water") && pMove === 11) {
-      return true;
-    } else if (pType.includes("grass") && pMove === 12) {
-      return true;
-    } else if (pType.includes("electric") && pMove === 13) {
-      return true;
-    } else if (pType.includes("psychic") && pMove === 14) {
-      return true;
-    } else if (pType.includes("ice") && pMove === 15) {
-      return true;
-    } else if (pType.includes("dragon") && pMove === 16) {
-      return true;
-    } else if (pType.includes("dark") && pMove === 17) {
-      return true;
-    } else if (pType.includes("fairy") && pMove === 18) {
-      return true;
-    } else {
-      return false;
+    for (let i = 0; i < types.length; i++) {
+      if (pType.includes(types[i]) && pMove === i + 1) {
+        return true;
+      }
     }
   }
 
