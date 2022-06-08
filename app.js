@@ -40,7 +40,6 @@ class Battlefield {
     } else if (this.pokemonOne.base_speed < this.pokemonTwo.base_speed) {
       this.roundOrder = [this.pokemonTwo, this.pokemonOne];
     }
-    console.log(this.roundOrder);
   }
 
   round() {
@@ -247,6 +246,14 @@ class Pokemon {
           dmgMultiplier = dmgMultiplier * 0.5;
         }
       }
+      //
+      for (let i = 0; i < this.type.immuneTo.length; i++) {
+        if (attackingPokemon.moves[0].type_id === this.type.immuneTo[i]) {
+          dmgMultiplier = dmgMultiplier * 0;
+        }
+      }
+
+      //
 
       const baseDamage = this.calculateBaseDamage(attackingPokemon).toFixed(2);
 
@@ -258,6 +265,8 @@ class Pokemon {
         updateSecondaryCommentary(
           `Its super effective! It does ${damageTaken} dmg to ${this.name}`
         );
+      } else if (dmgMultiplier === 0) {
+        updateSecondaryCommentary(`It doesnt affect ${this.name}...`);
       } else if (dmgMultiplier < 1) {
         updateSecondaryCommentary(
           `Its not very effective... It does ${damageTaken} dmg to ${this.name}`
@@ -364,7 +373,49 @@ function handleTypes(responseTypes) {
     }
   }
 
-  return { type: types, weakTo: weaknesses, resistantTo: resistances };
+  const immunities = [];
+
+  for (let i = 0; i < types.length; i++) {
+    if (types[i] === "normal") {
+      immunities.push(8);
+    } else if (types[i] === "fighting") {
+      immunities.push(null);
+    } else if (types[i] === "flying") {
+      immunities.push(5);
+    } else if (types[i] === "poison") {
+      immunities.push(null);
+    } else if (types[i] === "ground") {
+      immunities.push(13);
+    } else if (types[i] === "rock") {
+      immunities.push(null);
+    } else if (types[i] === "bug") {
+      immunities.push(null);
+    } else if (types[i] === "ghost") {
+      immunities.push(1, 2);
+    } else if (types[i] === "steel") {
+      immunities.push(4);
+    } else if (types[i] === "fire") {
+      immunities.push(null);
+    } else if (types[i] === "water") {
+      immunities.push(null);
+    } else if (types[i] === "grass") {
+      immunities.push(null);
+    } else if (types[i] === "electric") {
+      immunities.push(null);
+    } else if (types[i] === "psychic") {
+      immunities.push(null);
+    } else if (types[i] === "ice") {
+      immunities.push(null);
+    } else if (types[i] === "dragon ") {
+      immunities.push(null);
+    } else if (types[i] === "dark") {
+      immunities.push(14);
+    } else if (types[i] === "fairy") {
+      immunities.push(16);
+    }
+  }
+
+  return { type: types, weakTo: weaknesses, resistantTo: resistances, immuneTo: immunities };
 }
 
 function handleMove(responseMoves) {
