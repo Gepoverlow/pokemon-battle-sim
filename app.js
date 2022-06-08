@@ -1,4 +1,4 @@
-const pokemonPool = 151;
+const pokemonPool = 152;
 
 class Battlefield {
   constructor(pokemonOne, pokemonTwo) {
@@ -19,8 +19,6 @@ class Battlefield {
 
   assignPositions() {
     let boundingClientRect = containerBattlefield.getBoundingClientRect();
-
-    console.log(this.roundOrder);
 
     let oneStartingY = 165;
     let oneStartingX = 50;
@@ -69,8 +67,6 @@ class Battlefield {
     } else if (!this.roundOrder[0].moves.length) {
       this.roundOrder[0].moves = this.roundOrder[1].moves;
     }
-
-    console.log(this.roundOrder);
   }
 
   round() {
@@ -104,7 +100,7 @@ class Battlefield {
     if (!this.gameOver) {
       setTimeout(() => {
         this.round();
-      }, 4200);
+      }, 4100);
     } else {
       return;
     }
@@ -207,12 +203,7 @@ class Pokemon {
   damageReceivedAnimation() {}
 
   bounceBackAnimation() {
-    // const adj = -50;
-
     let midFieldPosition = containerBattlefield.clientWidth / 2;
-
-    // console.log(containerBattlefield.clientHeight);
-    // console.log(containerBattlefield.clientWidth);
 
     if (this.elementId === "pokemon-one-img") {
       let randomXPosition = randomIntFromInterval(0, midFieldPosition - 100);
@@ -263,6 +254,51 @@ class Pokemon {
     }
   }
 
+  checkForStab(attackingPokemon) {
+    const pType = attackingPokemon.type.type;
+    const pMove = attackingPokemon.moves[0].type_id;
+
+    if (pType.includes("normal") && pMove === 1) {
+      return true;
+    } else if (pType.includes("fighting") && pMove === 2) {
+      return true;
+    } else if (pType.includes("flying") && pMove === 3) {
+      return true;
+    } else if (pType.includes("poison") && pMove === 4) {
+      return true;
+    } else if (pType.includes("ground") && pMove === 5) {
+      return true;
+    } else if (pType.includes("rock") && pMove === 6) {
+      return true;
+    } else if (pType.includes("bug") && pMove === 7) {
+      return true;
+    } else if (pType.includes("ghost") && pMove === 8) {
+      return true;
+    } else if (pType.includes("steel") && pMove === 9) {
+      return true;
+    } else if (pType.includes("fire") && pMove === 10) {
+      return true;
+    } else if (pType.includes("water") && pMove === 11) {
+      return true;
+    } else if (pType.includes("grass") && pMove === 12) {
+      return true;
+    } else if (pType.includes("electric") && pMove === 13) {
+      return true;
+    } else if (pType.includes("psychic") && pMove === 14) {
+      return true;
+    } else if (pType.includes("ice") && pMove === 15) {
+      return true;
+    } else if (pType.includes("dragon") && pMove === 16) {
+      return true;
+    } else if (pType.includes("dark") && pMove === 17) {
+      return true;
+    } else if (pType.includes("fairy") && pMove === 18) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   rollCriticalChance() {
     const rng = Math.floor(Math.random() * 101);
     let criticalMultiplier = 1;
@@ -288,20 +324,17 @@ class Pokemon {
           typeMultiplier = typeMultiplier * 0.5;
         }
       }
-      //
+
       for (let i = 0; i < this.type.immuneTo.length; i++) {
         if (attackingPokemon.moves[0].type_id === this.type.immuneTo[i]) {
           typeMultiplier = typeMultiplier * 0;
         }
       }
 
-      //
-
+      const stab = this.checkForStab(attackingPokemon) ? 2 : 1;
       const criticalMultiplier = this.rollCriticalChance();
-
       const baseDamage = this.calculateBaseDamage(attackingPokemon);
-
-      const damageTaken = baseDamage * criticalMultiplier * typeMultiplier;
+      const damageTaken = baseDamage * criticalMultiplier * stab * typeMultiplier;
 
       const roundedDamage = (Math.round(damageTaken * 100) / 100).toFixed(2);
 
@@ -520,7 +553,6 @@ async function createBattleField() {
   createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
 
   battle.round();
-  console.log(battle);
 }
 
 async function getMoves() {
