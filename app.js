@@ -51,7 +51,7 @@ class Battlefield {
       if (!this.gameOver) {
         this.roundOrder[0].attackAnimation(this.roundOrder[1]);
         updatePrimaryCommentary(`${this.roundOrder[0].name} used ${pokemoOneMove.identifier}!`);
-        this.roundOrder[1].calculateDamageReceived(pokemoOneMove);
+        this.roundOrder[1].calculateDamageReceived(this.roundOrder[0]);
       }
       this.gameOver ? null : this.updatePokemonTwoHealth(this.roundOrder[1]);
     }, 2000);
@@ -60,7 +60,7 @@ class Battlefield {
       if (!this.gameOver) {
         this.roundOrder[1].attackAnimation(this.roundOrder[0]);
         updatePrimaryCommentary(`${this.roundOrder[1].name} used ${pokemoTwoMove.identifier}!`);
-        this.roundOrder[0].calculateDamageReceived(pokemoTwoMove);
+        this.roundOrder[0].calculateDamageReceived(this.roundOrder[1]);
       }
       this.gameOver ? null : this.updatePokemonOneHealth(this.roundOrder[0]);
     }, 4000);
@@ -143,6 +143,10 @@ class Pokemon {
     this.current_hp = response.stats[0].base_stat * 7;
     this.base_hp = response.stats[0].base_stat * 7;
     this.base_speed = response.stats[5].base_stat;
+    this.base_attack = response.stats[1].base_stat;
+    this.base_s_attack = response.stats[3].base_stat;
+    this.base_defence = response.stats[2].base_stat;
+    this.base_s_defence = response.stats[4].base_stat;
     this.type = handleTypes(response.types);
     this.moves = handleMove(response.moves);
     this.x = undefined;
@@ -166,6 +170,8 @@ class Pokemon {
       this.bounceBackAnimation();
     }, 1000);
   }
+
+  damageReceivedAnimation() {}
 
   bounceBackAnimation() {
     const adj = -50;
@@ -211,22 +217,28 @@ class Pokemon {
     }
   }
 
-  calculateDamageReceived(move) {
-    if (this.isSuccesfullHit(move)) {
+  calculateBaseDamage(attackingPokemon) {
+    console.log(attackingPokemon);
+  }
+
+  calculateDamageReceived(attackingPokemon) {
+    if (this.isSuccesfullHit(attackingPokemon.moves[0])) {
       let dmgMultiplier = 1;
 
       for (let i = 0; i < this.type.weakTo.length; i++) {
-        if (move.type_id === this.type.weakTo[i]) {
+        if (attackingPokemon.moves[0].type_id === this.type.weakTo[i]) {
           dmgMultiplier = dmgMultiplier * 2;
         }
       }
       for (let i = 0; i < this.type.resistantTo.length; i++) {
-        if (move.type_id === this.type.resistantTo[i]) {
+        if (attackingPokemon.moves[0].type_id === this.type.resistantTo[i]) {
           dmgMultiplier = dmgMultiplier * 0.5;
         }
       }
 
-      let damageTaken = move.power * dmgMultiplier;
+      // const baseDamage =
+
+      const damageTaken = attackingPokemon.moves[0].power * dmgMultiplier;
 
       this.current_hp = this.current_hp - damageTaken;
 
