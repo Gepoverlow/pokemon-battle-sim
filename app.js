@@ -4,7 +4,7 @@ class Battlefield {
   constructor(pokemonOne, pokemonTwo) {
     this.pokemonOne = pokemonOne;
     this.pokemonTwo = pokemonTwo;
-    this.roundOrder = this.determineFastest();
+    this.roundOrder = [pokemonOne, pokemonTwo];
     this.gameOver = false;
   }
 
@@ -36,35 +36,39 @@ class Battlefield {
 
   determineFastest() {
     if (this.pokemonOne.base_speed > this.pokemonTwo.base_speed) {
-      return [this.pokemonOne, this.pokemonTwo];
+      this.roundOrder = [this.pokemonOne, this.pokemonTwo];
     } else if (this.pokemonOne.base_speed < this.pokemonTwo.base_speed) {
-      return [this.pokemonTwo, this.pokemonOne];
+      this.roundOrder = [this.pokemonTwo, this.pokemonOne];
     }
+    console.log(this.roundOrder);
   }
 
   round() {
     this.shuffleMoves(this.pokemonOne.moves);
     this.shuffleMoves(this.pokemonTwo.moves);
 
-    let pokemoOneMove = this.roundOrder[0].moves[0];
-    let pokemoTwoMove = this.roundOrder[1].moves[0];
+    let firstPokemon = this.roundOrder[0];
+    let secondPokemon = this.roundOrder[1];
+
+    let firstPokemonMove = firstPokemon.moves[0];
+    let secondPokemonMove = secondPokemon.moves[0];
 
     setTimeout(() => {
       if (!this.gameOver) {
-        this.roundOrder[0].attackAnimation(this.roundOrder[1]);
-        updatePrimaryCommentary(`${this.roundOrder[0].name} used ${pokemoOneMove.identifier}!`);
-        this.roundOrder[1].calculateDamageReceived(this.roundOrder[0]);
+        firstPokemon.attackAnimation(secondPokemon);
+        updatePrimaryCommentary(`${firstPokemon.name} used ${firstPokemonMove.identifier}!`);
+        secondPokemon.calculateDamageReceived(firstPokemon);
       }
-      this.gameOver ? null : this.updatePokemonTwoHealth(this.roundOrder[1]);
+      this.gameOver ? null : this.updatePokemonTwoHealth(secondPokemon);
     }, 2000);
 
     setTimeout(() => {
       if (!this.gameOver) {
-        this.roundOrder[1].attackAnimation(this.roundOrder[0]);
-        updatePrimaryCommentary(`${this.roundOrder[1].name} used ${pokemoTwoMove.identifier}!`);
-        this.roundOrder[0].calculateDamageReceived(this.roundOrder[1]);
+        secondPokemon.attackAnimation(firstPokemon);
+        updatePrimaryCommentary(`${secondPokemon.name} used ${secondPokemonMove.identifier}!`);
+        firstPokemon.calculateDamageReceived(secondPokemon);
       }
-      this.gameOver ? null : this.updatePokemonOneHealth(this.roundOrder[0]);
+      this.gameOver ? null : this.updatePokemonOneHealth(firstPokemon);
     }, 4000);
 
     if (!this.gameOver) {
@@ -403,14 +407,15 @@ async function createBattleField() {
   await assignMoves(pokemonTwo);
 
   const battle = new Battlefield(pokemonOne, pokemonTwo);
-  console.log(battle);
 
+  battle.determineFastest();
   battle.assignPositions();
   battle.assignElementIds();
 
   createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
 
   battle.round();
+  console.log(battle);
 }
 
 async function getMoves() {
