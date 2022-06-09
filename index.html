@@ -7,16 +7,38 @@
 
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="images/wolf-icon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
   </head>
   <body>
       <div class="container-all">
         <div class="container-description">
-          <h3>Pokemon Battle Sim</h3>
+          <h1>Pokemon Battle Sim</h1>
           <p>
             On the click of the button, fetch 2 random pokemon, create its objects, and get them together in the battle arena to fight each other untill one gets defeated. Currently takes into account type effectiveness, pokemon speed, attack, special attack, defense, special defense, critical chance, STAB and move accuracy. To initialize another battle, you need to wait 6 seconds atfter the end and click the battlefield again.
           </p>
         </div>
-        <div class="container-battlefield"></div>
+        <div class="container-all-battlefield">
+          <div class="container-battlefield"></div>
+          <div class="container-info">
+            <div class="container-info-random">
+              <h2>Random (From - To)</h2>
+              <span>Pokemon Pool: </span>
+              <span><input class="input" type="text"> - <input class="input" type="text"></span>
+              <button>Fight!</button>
+            </div>
+            <div class="container-info-pick"> 
+              <h2>Pick (by Name or Id)</h2>
+              <span><input class="input" type="text"> VS <input class="input" type="b"></span>
+              <button>Fight!</button>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
     <script src="app.js"></script>

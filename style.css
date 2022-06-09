@@ -1,6 +1,12 @@
 body {
   background-color: #4f7092;
   color: aliceblue;
+  /* font-family: "Press Start 2P", cursive; */
+  font-family: "Righteous", cursive;
+}
+
+h2 {
+  margin: 0;
 }
 
 .container-all {
@@ -8,6 +14,11 @@ body {
   flex-direction: column;
   justify-content: center;
   padding: 0 3em;
+}
+
+.container-all-battlefield {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .container-battlefield {
@@ -18,12 +29,34 @@ body {
   position: relative;
   color: black;
   min-height: 300px;
-  max-width: 600px;
+  width: 100%;
   border: 2px solid #ffc300;
   justify-self: center;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.container-info {
+  display: grid;
+  padding: 5px;
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+}
+
+.input {
+  width: 77px;
+}
+
+.container-info-random,
+.container-info-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  border: 1px solid #ffc300;
+  /* gap: 0.5em; */
 }
 
 #top-health-bar,
@@ -67,4 +100,17 @@ body {
 #pokemon-two-img {
   position: absolute;
   transition: all 1s ease-in-out;
+}
+
+@media only screen and (max-width: 760px) {
+  .container-all-battlefield {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 370px) {
+  .input {
+    width: 60px;
+  }
 }
