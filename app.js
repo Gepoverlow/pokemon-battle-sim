@@ -1,5 +1,3 @@
-const pokemonPool = 152;
-
 class Battlefield {
   constructor(pokemonOne, pokemonTwo) {
     this.pokemonOne = pokemonOne;
@@ -500,10 +498,9 @@ function handleMove(responseMoves) {
   return allResponseMoves;
 }
 
-async function getPokemon() {
-  let randomNumber = Math.floor(Math.random() * pokemonPool);
-
-  const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber}`);
+async function getPokemon(aPokemonId) {
+  const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${aPokemonId}`);
+  if (data.status === 404) return;
   const response = await data.json();
 
   return response;
@@ -522,9 +519,9 @@ async function assignMoves(pokemon) {
   // pokemon.moves = randomMoves(commonMoves);
 }
 
-async function createBattleField() {
-  const pokemonOne = new Pokemon(await getPokemon());
-  const pokemonTwo = new Pokemon(await getPokemon());
+async function createBattleField(aPokemonId, anotherPokemonId) {
+  const pokemonOne = new Pokemon(await getPokemon(aPokemonId));
+  const pokemonTwo = new Pokemon(await getPokemon(anotherPokemonId));
 
   await assignMoves(pokemonOne);
   await assignMoves(pokemonTwo);
@@ -550,9 +547,16 @@ async function getMoves() {
 
 ///////////////////////////////////////////////////////////////////////////////// DOM STUFF
 const containerAll = document.querySelector(".container-all");
+const inputRandomFrom = document.getElementById("input-random-from");
+const inputRandomTo = document.getElementById("input-random-to");
+const buttonRandomFight = document.getElementById("button-random-fight");
+
+const inputPickOne = document.getElementById("input-pick-one");
+const inputPickTwo = document.getElementById("input-pick-two");
+const buttonPickFight = document.getElementById("button-pick-fight");
 
 const containerBattlefield = document.querySelector(".container-battlefield");
-containerBattlefield.textContent = "Click me to start a new match!";
+// containerBattlefield.textContent = "Click me to start a new match!";
 
 const primaryCommentary = document.createElement("span");
 containerAll.appendChild(primaryCommentary);
@@ -651,11 +655,42 @@ function displayPokemonTwoVitals(pokemon, bar) {
   bar.appendChild(pokemonVitalsContainer);
 }
 
-containerBattlefield.addEventListener("click", () => {
+// containerBattlefield.addEventListener("click", () => {
+//   if (!containerBattlefield.classList.contains("fighting")) {
+//     containerBattlefield.classList.add("fighting");
+//     containerBattlefield.innerHTML = "";
+//     createBattleField();
+//   }
+// });
+
+buttonRandomFight.addEventListener("click", () => {
+  let fromValue = Number(inputRandomFrom.value);
+  let toValue = Number(inputRandomTo.value);
+
+  if (
+    fromValue > 0 &&
+    fromValue < 899 &&
+    toValue > 0 &&
+    toValue < 899 &&
+    !containerBattlefield.classList.contains("fighting")
+  ) {
+    let firstRandomId = randomIntFromInterval(fromValue, toValue);
+    let secondRandomId = randomIntFromInterval(fromValue, toValue);
+
+    containerBattlefield.classList.add("fighting");
+    containerBattlefield.innerHTML = "";
+    createBattleField(firstRandomId, secondRandomId);
+  }
+});
+
+buttonPickFight.addEventListener("click", () => {
+  let oneValue = inputPickOne.value;
+  let twoValue = inputPickTwo.value;
+
   if (!containerBattlefield.classList.contains("fighting")) {
     containerBattlefield.classList.add("fighting");
     containerBattlefield.innerHTML = "";
-    createBattleField();
+    createBattleField(oneValue, twoValue);
   }
 });
 
