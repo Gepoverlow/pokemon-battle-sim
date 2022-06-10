@@ -186,6 +186,14 @@ class Pokemon {
   }
 
   attackAnimation(defendingPokemon) {
+    if (this.moves[0].damage_class_id === 2) {
+      this.physicalAttack(defendingPokemon);
+    } else {
+      this.specialAttack(defendingPokemon);
+    }
+  }
+
+  physicalAttack(defendingPokemon) {
     let attackPositionX = defendingPokemon.x;
     let attackPositionY = defendingPokemon.y;
     this.x = attackPositionX;
@@ -193,12 +201,59 @@ class Pokemon {
     let attackingPokemon = document.getElementById(`${this.elementId}`);
     attackingPokemon.style.top = this.y + "px";
     attackingPokemon.style.left = this.x + "px";
+
+    this.handlePhysicalMove(attackPositionX, attackPositionY, this.moves[0].type_id);
+
     setTimeout(() => {
       this.bounceBackAnimation();
     }, 1000);
   }
 
-  damageReceivedAnimation() {}
+  specialAttack(defendingPokemon) {
+    let attackPositionX = defendingPokemon.x;
+    let attackPositionY = defendingPokemon.y;
+
+    this.handleSpecialMove(attackPositionX, attackPositionY, this.moves[0].type_id);
+  }
+
+  handleSpecialMove(x, y, attType) {
+    let battleContainer = document.querySelector(".container-battlefield");
+    let typeImg = document.createElement("img");
+    typeImg.className = "type-img";
+    typeImg.src = `./type-images/${attType}.png`;
+
+    typeImg.style.top = this.y + 25 + "px";
+    typeImg.style.left = this.x + 25 + "px";
+
+    battleContainer.appendChild(typeImg);
+
+    setTimeout(() => {
+      typeImg.style.top = y + 25 + "px";
+      typeImg.style.left = x + 25 + "px";
+    }, 500);
+
+    setTimeout(() => {
+      battleContainer.removeChild(typeImg);
+    }, 1500);
+  }
+
+  handlePhysicalMove(x, y, attType) {
+    let battleContainer = document.querySelector(".container-battlefield");
+    let typeImg = document.createElement("img");
+    typeImg.className = "type-img";
+    typeImg.src = `./type-images/${attType}.png`;
+
+    typeImg.style.top = y + 25 + "px";
+    typeImg.style.left = x + 25 + "px";
+
+    setTimeout(() => {
+      battleContainer.appendChild(typeImg);
+    }, 1000);
+
+    setTimeout(() => {
+      battleContainer.removeChild(typeImg);
+    }, 1500);
+  }
 
   bounceBackAnimation() {
     let midFieldPosition = containerBattlefield.clientWidth / 2;
