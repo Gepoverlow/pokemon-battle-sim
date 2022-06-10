@@ -328,7 +328,7 @@ class Pokemon {
       if (typeMultiplier > 0 && criticalMultiplier > 1) {
         updateTertiaryCommentary("Critical Hit! ");
       } else {
-        updateTertiaryCommentary("");
+        updateTertiaryCommentary("-");
       }
 
       if (typeMultiplier > 1) {
@@ -547,6 +547,7 @@ async function getMoves() {
 
 ///////////////////////////////////////////////////////////////////////////////// DOM STUFF
 const containerAll = document.querySelector(".container-all");
+const containerDescription = document.querySelector(".container-description");
 const inputRandomFrom = document.getElementById("input-random-from");
 const inputRandomTo = document.getElementById("input-random-to");
 const buttonRandomFight = document.getElementById("button-random-fight");
@@ -556,14 +557,16 @@ const inputPickTwo = document.getElementById("input-pick-two");
 const buttonPickFight = document.getElementById("button-pick-fight");
 
 const containerBattlefield = document.querySelector(".container-battlefield");
-// containerBattlefield.textContent = "Click me to start a new match!";
 
 const primaryCommentary = document.createElement("span");
-containerAll.appendChild(primaryCommentary);
+primaryCommentary.textContent = "-";
+containerDescription.appendChild(primaryCommentary);
 const secondaryCommentary = document.createElement("span");
-containerAll.appendChild(secondaryCommentary);
+secondaryCommentary.textContent = "-";
+containerDescription.appendChild(secondaryCommentary);
 const tertiaryCommentary = document.createElement("span");
-containerAll.appendChild(tertiaryCommentary);
+tertiaryCommentary.textContent = "-";
+containerDescription.appendChild(tertiaryCommentary);
 
 function updatePrimaryCommentary(string) {
   primaryCommentary.textContent = string;
@@ -588,8 +591,6 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
   pokemonOneImg.id = "pokemon-one-img";
   pokemonOneImg.style.top = pokemonOne.y + "px";
   pokemonOneImg.style.left = pokemonOne.x + "px";
-  // pokemonOneImg.style.top = pokemonOne.x + 115 + "px";
-  // pokemonOneImg.style.left = pokemonOne.y + "px";
   pokemonOneImg.src = pokemonOne.sprite_back;
   containerBattle.appendChild(pokemonOneImg);
 
@@ -597,8 +598,6 @@ function createBattleContainer(pokemonOne, pokemonTwo) {
   pokemonTwoImg.id = "pokemon-two-img";
   pokemonTwoImg.style.top = pokemonTwo.y + "px";
   pokemonTwoImg.style.left = pokemonTwo.x + "px";
-  // pokemonTwoImg.style.top = pokemonTwo.x - 15 + "px";
-  // pokemonTwoImg.style.left = boundingClientRect.right - 200 + "px";
   pokemonTwoImg.src = pokemonTwo.sprite_front;
   containerBattle.appendChild(pokemonTwoImg);
 
@@ -654,14 +653,6 @@ function displayPokemonTwoVitals(pokemon, bar) {
 
   bar.appendChild(pokemonVitalsContainer);
 }
-
-// containerBattlefield.addEventListener("click", () => {
-//   if (!containerBattlefield.classList.contains("fighting")) {
-//     containerBattlefield.classList.add("fighting");
-//     containerBattlefield.innerHTML = "";
-//     createBattleField();
-//   }
-// });
 
 buttonRandomFight.addEventListener("click", () => {
   let fromValue = Number(inputRandomFrom.value);
