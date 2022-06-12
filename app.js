@@ -553,6 +553,16 @@ function handleMove(responseMoves) {
   return allResponseMoves;
 }
 
+function handleNotFoundPokemons() {
+  containerBattlefield.innerHTML = "";
+
+  const unfoundMsg = document.createElement("span");
+  unfoundMsg.id = "unfound-msg";
+  unfoundMsg.textContent =
+    "One or more pokemons were not found. Please check the Name or Id is correct!";
+  containerBattlefield.appendChild(unfoundMsg);
+}
+
 async function getPokemon(aPokemonId) {
   const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${aPokemonId}`);
   if (data.status === 404) return;
@@ -574,23 +584,32 @@ async function assignMoves(pokemon) {
   // pokemon.moves = randomMoves(commonMoves);
 }
 
-async function createBattleField(aPokemonId, anotherPokemonId) {
-  const pokemonOne = new Pokemon(await getPokemon(aPokemonId));
-  const pokemonTwo = new Pokemon(await getPokemon(anotherPokemonId));
+async function createBattleField(aPokemonId, anotherPokemonId, container) {
+  const responseOne = await getPokemon(aPokemonId);
+  const responseTwo = await getPokemon(anotherPokemonId);
 
-  await assignMoves(pokemonOne);
-  await assignMoves(pokemonTwo);
+  if (responseOne && responseTwo) {
+    const pokemonOne = new Pokemon(responseOne);
+    const pokemonTwo = new Pokemon(responseTwo);
 
-  const battle = new Battlefield(pokemonOne, pokemonTwo);
+    await assignMoves(pokemonOne);
+    await assignMoves(pokemonTwo);
 
-  battle.determineFastest();
-  battle.assignPositions();
-  battle.assignElementIds();
-  battle.checkForDittos();
+    const battle = new Battlefield(pokemonOne, pokemonTwo);
+    container.innerHTML = "";
+    container.classList.add("fighting");
 
-  createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
+    battle.determineFastest();
+    battle.assignPositions();
+    battle.assignElementIds();
+    battle.checkForDittos();
 
-  battle.round();
+    createBattleContainer(battle.roundOrder[0], battle.roundOrder[1]);
+
+    battle.round();
+  } else {
+    handleNotFoundPokemons();
+  }
 }
 
 async function getMoves() {
@@ -723,9 +742,7 @@ buttonRandomFight.addEventListener("click", () => {
     let firstRandomId = randomIntFromInterval(fromValue, toValue);
     let secondRandomId = randomIntFromInterval(fromValue, toValue);
 
-    containerBattlefield.classList.add("fighting");
-    containerBattlefield.innerHTML = "";
-    createBattleField(firstRandomId, secondRandomId);
+    createBattleField(firstRandomId, secondRandomId, containerBattlefield);
   }
 });
 
@@ -733,10 +750,11 @@ buttonPickFight.addEventListener("click", () => {
   let oneValue = inputPickOne.value;
   let twoValue = inputPickTwo.value;
 
+  let trimmedValueOne = oneValue.trim().toLowerCase();
+  let trimmedValueTwo = twoValue.trim().toLowerCase();
+
   if (!containerBattlefield.classList.contains("fighting")) {
-    containerBattlefield.classList.add("fighting");
-    containerBattlefield.innerHTML = "";
-    createBattleField(oneValue, twoValue);
+    createBattleField(trimmedValueOne, trimmedValueTwo, containerBattlefield);
   }
 });
 
