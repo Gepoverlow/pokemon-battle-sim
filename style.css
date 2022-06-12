@@ -135,3 +135,11 @@ h2 {
   background-color: rgba(0, 0, 0, 0.5);
   color: rgb(220, 217, 217);
 }
+
+#pokemon-one-vitals,
+#pokemon-two-vitals {
+  padding: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(220, 217, 217);
+  border-radius: 3px;
+}
